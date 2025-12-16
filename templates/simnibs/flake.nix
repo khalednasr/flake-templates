@@ -1,5 +1,5 @@
 {
-  description = "Python with uv package management";
+  description = "Python with SimNIBS";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -12,8 +12,11 @@
       {
         devShells.default = with pkgs; mkShell {
           packages = [
-            python314  # Change python version here
+            python311
             uv
+            gcc
+            ninja  # For building python-mumps
+            gmsh
           ];
 
           # Native library dependencies
@@ -38,8 +41,19 @@
             xcb-util-cursor
             libxkbcommon
 
-            # CUDA and nvidia driver for PyTorch
-            # cudatoolkit linuxPackages.nvidia_x11
+            # SimNIBS dependencies
+            mkl
+            cgal
+            mpfr
+            gmp
+            libwebp
+            mesa
+            libGL
+            freeglut
+          ];
+
+          nativeBuildInputs = [
+            mumps-mpi  # for building python-mumps
           ];
 
           # For matplotlib qtagg backend
