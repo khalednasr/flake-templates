@@ -13,6 +13,7 @@
         devShells.default = with pkgs; mkShell {
           packages = [
             python314  # Change python version here
+            python314Packages.python-lsp-server
             uv
           ];
 
