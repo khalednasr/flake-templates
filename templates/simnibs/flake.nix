@@ -3,16 +3,29 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-python.url = "github:cachix/nixpkgs-python";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
-  outputs = { nixpkgs, flake-utils, ... }:
+  nixConfig = {
+    extra-substituters = [
+      "https://nixpkgs-python.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nixpkgs-python.cachix.org-1:hxjI7pFxTyuTHn2NkvWCrAUcNZLNS3ZAvfYNuYifcEU="
+    ];
+  };
+
+  outputs = { nixpkgs, nixpkgs-python, flake-utils, ... }:
     flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = import nixpkgs { inherit system; config.allowUnfree = true; }; in
+      let 
+        pkgs = import nixpkgs { inherit system; config.allowUnfree = true; }; 
+        pythonVersion = "3.11.0";
+      in
       {
         devShells.default = with pkgs; mkShell {
           packages = [
-            python311
+            nixpkgs-python.packages.${system}.${pythonVersion}
             uv
             gcc
             ninja  # For building python-mumps
@@ -26,6 +39,7 @@
             zlib
 
             # PySide6 dependencies; for matplotlib qtagg backend
+            zstd
             dbus
             libGL
             glib

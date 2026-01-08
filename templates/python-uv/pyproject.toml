@@ -2,11 +2,11 @@
 name = "python-uv"
 version = "0.1.0"
 description = "Add your description here"
-requires-python = ">=3.13"
+requires-python = ">= 3.10"
 dependencies = [
-    "matplotlib>=3.10.8",
-    "numpy>=2.3.5",
-    "pyside6>=6.10.1",
+    "matplotlib",
+    "numpy",
+    "pyside6",
 ]
 
 [tool.uv]
